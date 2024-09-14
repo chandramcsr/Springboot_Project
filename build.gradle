@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.openrewrite.rewrite' version '6.21.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+rewrite {
+    activeRecipe("org.openrewrite.java.migrate.UpgradeBuildToJava21")
+    exportDatatables = true
+}
+
+ext {
+    set('springCloudVersion', "2023.0.3")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    //compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+    //OpenAPI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.yaml:snakeyaml:2.2'
+    implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2')
+    implementation 'org.json:json:20240303'
+
+    implementation(platform("io.opentelemetry:opentelemetry-bom:1.31.0"))
+    implementation("io.opentelemetry:opentelemetry-api")
+    compileOnly("org.projectlombok:lombok")
+
+    //open rewrite
+
+    rewrite("org.openrewrite.recipe:rewrite-migrate-java:2.22.0")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+

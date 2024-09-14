@@ -1,0 +1,7 @@
+server:
+  port: 2020
+
+springdoc:
+  packagesToScan: com.example.demo
+  pathsToMatch: /v1, /api/balance/**
+
